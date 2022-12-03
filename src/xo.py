@@ -10,10 +10,11 @@ from src.figure import Figure
 
 
 class XO:
-    """Класс для управления ресурсами и поведением игры"""
+    """Класс для управления ресурсами и поведением игры."""
 
     def __init__(self):
-        """"""
+        """Инициализирует игру и создаёт игровые объекты, 2 раза
+            вызывает ход ИИ."""
         pg.init()
 
         self.__screen = pg.display.set_mode(
@@ -27,24 +28,24 @@ class XO:
         self.__cross = Figure(path.CROSS)
         self.__nought = Figure(path.NOUGHT)
 
-        self.__field.press_handler(self.__ai.move(self.__field.get_n_cells),
-                                   self.__cross)
-        self.__field.press_handler(self.__ai.move(self.__field.get_n_cells),
-                                   self.__nought)
+        self.__field.index_move_handler(self.__ai.move(
+            self.__field.get_n_free_cells), self.__cross)
+        self.__field.index_move_handler(self.__ai.move(
+            self.__field.get_n_free_cells), self.__nought)
 
     def run(self):
-        """Запуск основного цикла игры"""
+        """Запуск основного цикла игры."""
         while True:
             self.__event_handler()
             self.__update_screen()
 
     def __event_handler(self):
-        """Обрабатывает события мыши"""
+        """Обрабатывает события мыши."""
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 sys.exit()
 
     def __update_screen(self):
-        """Обновляет изображения на экране и отображает новый экран"""
+        """Обновляет изображения на экране и отображает новый экран."""
         self.__field.paint(self.__screen)
         pg.display.flip()

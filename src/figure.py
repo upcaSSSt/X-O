@@ -1,18 +1,13 @@
-from abc import ABC, abstractmethod
-
 import pygame as pg
 
-from const import settings
 
-
-class Figure(ABC):
+class Figure:
     """"""
 
-    def __init__(self):
+    def __init__(self, sprite_path: str):
         """"""
-        self.rect = pg.Rect((0, 0, settings.CELL_SIZE, settings.CELL_SIZE))#////
-        self._draw()
+        self.__figure = pg.image.load(sprite_path)
 
-    @abstractmethod
-    def _draw(self):
-        pass
+    @property
+    def get_figure(self):
+        return self.__figure

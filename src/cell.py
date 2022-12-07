@@ -2,10 +2,9 @@ import pygame as pg
 
 from src.const import settings
 from src.const import colors
-from src.figure import Figure
 
 
-class Cell:
+class Cell(pg.sprite.Sprite):
     """Класс для создания клетки и получения фигуры для неё."""
 
     def __init__(self, pos: tuple):
@@ -14,21 +13,25 @@ class Cell:
         pos: координаты, по которым будет располагаться клетка на
             поверхности сетки
         """
-        self.__pos = pos
-        self.__figure = pg.Surface((settings.CELL_SIZE, settings.CELL_SIZE))
+        pg.sprite.Sprite.__init__(self)
 
-        self.__figure.fill(colors.BLACK)
+        self.image = pg.Surface((settings.CELL_SIZE, settings.CELL_SIZE))
+        self.rect = self.image.get_rect()
+
+        self.image.fill(colors.BLACK)
+        self.rect.topleft = pos
 
     def paint(self, painting_grid: pg.Surface):
         """Рисует клетку на переданной поверхности сетки.
         painting_grid: поверхность сетки, на которой надо нарисовать
             поверхность клетки
         """
-        painting_grid.blit(self.__figure, self.__pos)
+        painting_grid.blit(self.image, self.rect)
 
-    def move_handler(self, moving_figure: Figure):
-        """Присваивает поверхности клетки поверхность переданной фигуры.
-        moving_figure: фигура, которой походили в данный момент, на её
-            поверхности нарисован крестик или нолик
+    def move_handler(self, figure_path: str):
+        """Рисует на поверхности клетки изображение фигуры,
+            расположенное по переданному пути.
+        figure_path: путь к изображению фигуры, которой походили в
+            данный момент
         """
-        self.__figure = moving_figure.get_surface
+        self.image = pg.image.load(figure_path)

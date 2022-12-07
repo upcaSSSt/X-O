@@ -3,7 +3,6 @@ import pygame as pg
 from src.const import settings
 from src.const import colors
 from src.cell import Cell
-from src.figure import Figure
 
 
 class Field:
@@ -50,12 +49,30 @@ class Field:
             cell.paint(self.__grid)
         painting_surface.blit(self.__grid, self.__coordinates)
 
-    def index_move_handler(self, index_to_move: int, moving_figure: Figure):
-        """Передаёт клетке по индексу фигуру, которой походили в данный
-            момент и удаляет эту клетку из списка свободных.
-        index_to_move: индекс клетки, в которую был сделан ход
-        moving_figure: фигура, которой походили в данный момент, на её
-            поверхности нарисован крестик или нолик
+    def click_move_handler(self, click_pos: tuple, figure_path: str):
+        """Берёт первую клетку, попавшую под клик пользователя,
+            передаёт ей путь к изображению фигуры, которой походили в
+            данный момент, удаляет эту клетку из списка свободных и
+            возвращает True, если кликнули на клетку, иначе False
+        click_pos: координаты клика
+        figure_path: путь к изображению с фигурой, которой походили в
+            данный момент
         """
-        self.__free_cells[index_to_move].move_handler(moving_figure)
+        clicked_cells = [c for c in self.__free_cells
+                         if c.rect.collidepoint(click_pos)]
+        if len(clicked_cells) > 0:
+            clicked_cells[0].move_handler(figure_path)
+            self.__free_cells.remove(clicked_cells[0])
+            return True
+        return False
+
+    def index_move_handler(self, index_to_move: int, figure_path: str):
+        """Передаёт клетке по индексу путь к изображению фигуры, которой
+            походили в данный момент и удаляет эту клетку из списка
+            свободных.
+        index_to_move: индекс клетки, в которую был сделан ход
+        figure_path: путь к изображению с фигурой, которой походили в
+            данный момент
+        """
+        self.__free_cells[index_to_move].move_handler(figure_path)
         del self.__free_cells[index_to_move]

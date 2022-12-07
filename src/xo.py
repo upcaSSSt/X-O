@@ -6,15 +6,13 @@ from src.const import settings
 from src.const import path
 from src.ai import AI
 from src.field import Field
-from src.figure import Figure
 
 
 class XO:
     """Класс для управления ресурсами и поведением игры."""
 
     def __init__(self):
-        """Инициализирует игру и создаёт игровые объекты, 2 раза
-            вызывает ход ИИ."""
+        """Инициализирует игру и создаёт игровые объекты."""
         pg.init()
 
         self.__screen = pg.display.set_mode(
@@ -22,16 +20,7 @@ class XO:
         pg.display.set_caption(settings.CAPTION)
 
         self.__ai = AI()
-
         self.__field = Field()
-
-        self.__cross = Figure(path.CROSS)
-        self.__nought = Figure(path.NOUGHT)
-
-        self.__field.index_move_handler(self.__ai.move(
-            self.__field.get_n_free_cells), self.__cross)
-        self.__field.index_move_handler(self.__ai.move(
-            self.__field.get_n_free_cells), self.__nought)
 
     def run(self):
         """Запуск основного цикла игры."""
@@ -44,6 +33,11 @@ class XO:
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 sys.exit()
+            if e.type == pg.MOUSEBUTTONDOWN:
+                if self.__field.click_move_handler(pg.mouse.get_pos(),
+                                                   path.CROSS):
+                    self.__field.index_move_handler(self.__ai.move(
+                        self.__field.get_n_free_cells), path.NOUGHT)
 
     def __update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""

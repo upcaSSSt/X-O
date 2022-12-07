@@ -36,7 +36,7 @@ class Field:
         self.__grid.fill(colors.VIOLET)
 
     @property
-    def get_n_free_cells(self):
+    def get_n_free_cells(self) -> int:
         return len(self.__free_cells)
 
     def paint(self, painting_surface: pg.Surface):
@@ -49,7 +49,7 @@ class Field:
             cell.paint(self.__grid)
         painting_surface.blit(self.__grid, self.__coordinates)
 
-    def click_move_handler(self, click_pos: tuple, figure_path: str):
+    def click_move_handler(self, click_pos: tuple, figure_path: str) -> bool:
         """Берёт первую клетку, попавшую под клик пользователя,
             передаёт ей путь к изображению фигуры, которой походили,
             удаляет эту клетку из списка свободных и возвращает True,

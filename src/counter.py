@@ -13,6 +13,6 @@ class Counter:
         """Прибавляет к счётчику новую фигуру в ряду победы."""
         self.__count += 1
 
-    def is_filled(self):
+    def is_filled(self) -> bool:
         """Проверяет заполненность ряда победы."""
         return self.__count >= settings.N_TO_FILL_ROW

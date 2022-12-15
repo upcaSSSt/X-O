@@ -1,9 +1,11 @@
-import pygame as pg
+from pygame import sprite
+from pygame import image
+from pygame import Surface
 
 from src.const import settings
 
 
-class Cell(pg.sprite.Sprite):
+class Cell(sprite.Sprite):
     """Класс для создания клетки и получения фигуры для неё."""
 
     def __init__(self, pos: tuple):
@@ -13,13 +15,13 @@ class Cell(pg.sprite.Sprite):
         """
         super().__init__()
 
-        self.image = pg.Surface((settings.CELL_SIZE, settings.CELL_SIZE))
+        self.image = Surface((settings.CELL_SIZE, settings.CELL_SIZE))
         self.rect = self.image.get_rect()
 
         self.image.set_alpha(0)
         self.rect.topleft = pos
 
-    def paint(self, painting_grid: pg.Surface):
+    def paint(self, painting_grid: Surface):
         """Рисует клетку на переданной поверхности сетки.
         painting_grid: поверхность сетки, на которой надо нарисовать поверхность клетки
         """
@@ -29,4 +31,4 @@ class Cell(pg.sprite.Sprite):
         """Рисует на поверхности клетки изображение фигуры, расположенное по переданному пути.
         figure_path: путь к изображению фигуры, которой походили в данный момент
         """
-        self.image = pg.image.load(figure_path).convert_alpha()
+        self.image = image.load(figure_path).convert_alpha()

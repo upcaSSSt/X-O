@@ -21,6 +21,7 @@ class XO:
         self.__field = Field()
 
         pg.display.set_caption(settings.CAPTION)
+        pg.display.set_icon(pg.image.load(path.ICON).convert_alpha())
 
     def run(self):
         """Запуск основного цикла игры."""

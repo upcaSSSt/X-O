@@ -6,6 +6,7 @@ from src.const import settings
 from src.const import path
 from src.ai import AI
 from src.field import Field
+from src.figure import Figure
 
 
 class XO:
@@ -17,10 +18,14 @@ class XO:
 
         self.__screen = pg.display.set_mode((settings.SCREEN_SIZE, settings.SCREEN_SIZE))
 
-        self.__ai = AI()
+        self.__cross = Figure(path.CROSS)
+        self.__zero = Figure(path.ZERO)
+
+        self.__ai = AI(self.__zero)
         self.__field = Field()
 
         pg.display.set_caption(settings.CAPTION)
+        self.__screen.blit(pg.image.load("src/img/dash.png").convert_alpha(), (0, 0))  # ////
 
     def run(self):
         """Запуск основного цикла игры."""
@@ -36,7 +41,7 @@ class XO:
             if e.type == pg.MOUSEBUTTONDOWN:
                 if self.__field.click_move_handler(pg.mouse.get_pos(), path.CROSS):
                     if self.__field.get_n_free_cells > 0:  # убрать////
-                        self.__field.index_move_handler(self.__ai.move(self.__field.get_n_free_cells), path.NOUGHT)
+                        self.__field.index_move_handler(self.__ai.move(self.__field.get_n_free_cells), path.ZERO)
 
     def __update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""

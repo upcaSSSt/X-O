@@ -1,3 +1,3 @@
 CROSS = "src/img/cross.png"
-NOUGHT = "src/img/nought.png"
+ZERO = "src/img/zero.png"
 GRID = "src/img/grid.png"

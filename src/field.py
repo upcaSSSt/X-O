@@ -1,4 +1,5 @@
-import pygame as pg
+from pygame import image
+from pygame import Surface
 
 from src.const import settings
 from src.const import path
@@ -11,7 +12,7 @@ class Field:
     def __init__(self):
         """Создаёт поверхность, на которую рисуется сетка и её клетки, список клеток и свободных клеток, сохраняет
         прямоугольник поверхности сетки, красит поверхность сетки."""
-        self.__grid = pg.image.load(path.GRID).convert_alpha()
+        self.__grid = image.load(path.GRID).convert_alpha()
         self.__rect = self.__grid.get_rect()
 
         self.__cells = [
@@ -33,7 +34,7 @@ class Field:
     def get_n_free_cells(self) -> int:
         return len(self.__free_cells)
 
-    def paint(self, painting_surface: pg.Surface):
+    def paint(self, painting_surface: Surface):
         """Рисует клетки на поверхности сетки, рисует поверхность сетки на переданной поверхности.
         painting_surface: поверхность, на которой надо нарисовать поверхность сетки
         """

@@ -38,7 +38,7 @@ class XO:
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 sys.exit()
-            if e.type == pg.MOUSEBUTTONDOWN:
+            elif e.type == pg.MOUSEBUTTONDOWN:
                 if self.__field.click_move_handler(pg.mouse.get_pos(), path.CROSS):
                     if self.__field.get_n_free_cells > 0:  # убрать////
                         self.__field.index_move_handler(self.__ai.move(self.__field.get_n_free_cells), path.ZERO)

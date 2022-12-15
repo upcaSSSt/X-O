@@ -1,13 +1,14 @@
 from random import randrange
 
+from pygame import Surface
+
 from src.player import Player
-from src.figure import Figure
 
 
 class AI(Player):
     """Класс для создания искусственного игрока и реализации логики его ходов."""
 
-    def __init__(self, figure: Figure):
+    def __init__(self, figure: Surface):
         """"""
         super(AI, self).__init__("Sanakan", figure)
 

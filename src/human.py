@@ -1,11 +1,12 @@
+from pygame import Surface
+
 from src.player import Player
-from src.figure import Figure
 
 
 class Human(Player):
     """"""
     
-    def __init__(self, name: str, figure: Figure):
+    def __init__(self, name: str, figure: Surface):
         """"""
         super(Human, self).__init__(name, figure)
     

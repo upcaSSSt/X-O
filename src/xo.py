@@ -6,6 +6,7 @@ from src.const import settings
 from src.const import path
 from src.ai import AI
 from src.field import Field
+from src.background_randomizer import BackgroundRandomizer
 
 
 class XO:
@@ -22,6 +23,7 @@ class XO:
 
         pg.display.set_caption(settings.CAPTION)
         pg.display.set_icon(pg.image.load(path.ICON).convert_alpha())
+        self.__screen.blit(pg.image.load(BackgroundRandomizer().random_path()).convert_alpha(), (0, 0))
 
     def run(self):
         """Запуск основного цикла игры."""

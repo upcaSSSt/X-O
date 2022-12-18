@@ -1,19 +1,11 @@
 from random import randrange
 
-from pygame import Surface
 
-from src.player import Player
-
-
-class AI(Player):
-    """Класс для создания искусственного игрока и реализации логики его ходов."""
-
-    def __init__(self, figure: Surface):
-        """"""
-        super(AI, self).__init__("Sanakan", figure)
+class AI:
+    """Класс для создания игрока-компьютера и реализации его поведения."""
 
     def move(self, n_free_cells: int) -> int:
-        """Возвращает случайный индекс клетки, в которую сделан ход.
+        """Возвращает случайный индекс клетки, в которую будет сделан ход.
         n_free_cells: кол-во свободных клеток, в которые можно ходить
         """
         return randrange(n_free_cells)

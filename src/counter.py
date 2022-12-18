@@ -9,7 +9,7 @@ class Counter:
         self.__count = 0
 
     def add(self):
-        """Прибавляет к счётчику новую фигуру в ряду победы."""
+        """Обновляет счётчик."""
         self.__count += 1
 
     def is_filled(self) -> bool:

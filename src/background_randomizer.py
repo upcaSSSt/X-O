@@ -12,5 +12,5 @@ class BackgroundRandomizer:
         self.__bg_paths = listdir(path.BACKGROUNDS)
 
     def random_path(self) -> str:
-        """Возвращает случайный путь к фоновому изображению."""
+        """Возвращает путь к случайно выбранному фоновому изображению."""
         return f"{path.BACKGROUNDS}{choice(self.__bg_paths)}"

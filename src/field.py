@@ -3,15 +3,16 @@ from pygame import Surface
 
 from src.const import settings
 from src.const import path
+from src.const import colors
 from src.cell import Cell
 
 
 class Field:
-    """Класс для хранения игровой сетки и управления её клетками."""
+    """Класс для создания игровой сетки и управления её клетками."""
 
     def __init__(self):
-        """Создаёт поверхность, на которую рисуется сетка и её клетки, список клеток и свободных клеток, сохраняет
-        прямоугольник поверхности сетки, красит поверхность сетки."""
+        """Создаёт поверхность, на которую рисуется сетка и её клетки, сохраняет её прямоугольник, создаёт список клеток
+        и свободных клеток, делает пространство с клетками прозрачным."""
         self.__grid = image.load(path.GRID).convert_alpha()
         self.__rect = self.__grid.get_rect()
 
@@ -28,7 +29,7 @@ class Field:
         ]
         self.__free_cells = self.__cells.copy()
 
-        self.__grid.set_colorkey((0, 0, 0))  # ////
+        self.__grid.set_colorkey(colors.DEFAULT)
 
     @property
     def get_n_free_cells(self) -> int:
@@ -43,10 +44,10 @@ class Field:
         painting_surface.blit(self.__grid, self.__rect)
 
     def click_move_handler(self, click_pos: tuple, figure_path: str) -> bool:
-        """Берёт первую клетку, попавшую под клик пользователя, передаёт ей путь к изображению фигуры, которой походили,
+        """Берёт клетку, по которой кликнул пользователь, передаёт ей путь к изображению фигуры, которой походили,
             удаляет эту клетку из списка свободных и возвращает True, если всё удалось, иначе False.
         click_pos: координаты клика
-        figure_path: путь к изображению с фигурой, которой походили в данный момент
+        figure_path: путь к изображению с фигурой, которой походили
         """
         clicked_cells = [fc for fc in self.__free_cells if fc.rect.collidepoint(click_pos)]
         if len(clicked_cells) > 0:
@@ -56,10 +57,10 @@ class Field:
         return False
 
     def index_move_handler(self, index_to_move: int, figure_path: str):
-        """Передаёт клетке по индексу путь к изображению фигуры, которой походили в данный момент и удаляет эту клетку
-            из списка свободных.
-        index_to_move: индекс клетки, в которую был сделан ход
-        figure_path: путь к изображению с фигурой, которой походили в данный момент
+        """Передаёт клетке по индексу путь к изображению фигуры, которой походили и удаляет эту клетку из списка
+            свободных.
+        index_to_move: индекс клетки, в которую сделан ход
+        figure_path: путь к изображению с фигурой, которой походили
         """
         self.__free_cells[index_to_move].move_handler(figure_path)
         del self.__free_cells[index_to_move]

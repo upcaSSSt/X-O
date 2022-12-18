@@ -13,7 +13,7 @@ class XO:
     """Класс для управления ресурсами и поведением игры."""
 
     def __init__(self):
-        """Инициализирует игру и создаёт игровые объекты."""
+        """Инициализирует игру, создаёт игровые объекты и задаёт фоновое изображение."""
         pg.init()
 
         self.__screen = pg.display.set_mode((settings.SCREEN_SIZE, settings.SCREEN_SIZE))
@@ -36,10 +36,10 @@ class XO:
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 sys.exit()
-            if e.type == pg.MOUSEBUTTONDOWN:
-                if self.__field.click_move_handler(pg.mouse.get_pos(), path.CROSS):
-                    if self.__field.get_n_free_cells > 0:  # убрать////
-                        self.__field.index_move_handler(self.__ai.move(self.__field.get_n_free_cells), path.NOUGHT)
+            elif e.type == pg.MOUSEBUTTONDOWN:
+                if self.__field.click_move_handler(pg.mouse.get_pos(), path.CROSS) and \
+                        self.__field.get_n_free_cells > 0:  # ////
+                    self.__field.index_move_handler(self.__ai.move(self.__field.get_n_free_cells), path.ZERO)
 
     def __update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""

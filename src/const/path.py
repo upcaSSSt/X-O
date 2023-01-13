@@ -1,3 +1,7 @@
+ICON = "src/img/icon.png"
 CROSS = "src/img/cross.png"
-ZERO = "src/img/zero.png"
+CIRCLE = "src/img/circle.png"
+DRAW = "src/img/draw.png"
 GRID = "src/img/grid.png"
+HUGGING = "src/img/hugging.png"
+BACKGROUNDS_FOLDER = "src/img/backgrounds/"

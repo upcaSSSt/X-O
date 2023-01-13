@@ -1,66 +1,94 @@
-from pygame import image
+from pygame.image import load
 from pygame import Surface
 
 from src.const import settings
 from src.const import path
-from src.const import colors
 from src.cell import Cell
+from src.counter import Counter
 
 
-class Field:
+class Field(Surface):
     """Класс для создания игровой сетки и управления её клетками."""
 
     def __init__(self):
         """Создаёт поверхность, на которую рисуется сетка и её клетки, сохраняет её прямоугольник, создаёт список клеток
         и свободных клеток, делает пространство с клетками прозрачным."""
-        self.__grid = image.load(path.GRID).convert_alpha()
-        self.__rect = self.__grid.get_rect()
+        super(Field, self).__init__((settings.SCREEN_SIZE, settings.SCREEN_SIZE))
+        self.blit(load(path.GRID).convert_alpha(), (0, 0))
+
+        self.__rect = self.get_rect()
+
+        self.__cur_figure_counters, self.__next_figure_counters, self.__clicked_cells = [], [], []
+
+        counters = [Counter() for _ in range(8)]
 
         self.__cells = [
-            Cell((0, 0)),
-            Cell((self.__rect.centerx - settings.CELL_SIZE // 2, 0)),
-            Cell((self.__rect.topright[0] - settings.CELL_SIZE, 0)),
-            Cell((0, self.__rect.centery - settings.CELL_SIZE // 2)),
-            Cell(tuple(pos - settings.CELL_SIZE // 2 for pos in self.__rect.center)),
-            Cell((self.__rect.midright[0] - settings.CELL_SIZE, self.__rect.centery - settings.CELL_SIZE // 2)),
-            Cell((0, self.__rect.bottomleft[1] - settings.CELL_SIZE)),
-            Cell((self.__rect.centerx - settings.CELL_SIZE // 2, self.__rect.midbottom[1] - settings.CELL_SIZE)),
-            Cell((self.__rect.bottomright[0] - settings.CELL_SIZE, self.__rect.bottomright[1] - settings.CELL_SIZE))
+            Cell((0, 0), [counters[0], counters[3], counters[6]]),
+            Cell((self.__rect.centerx - settings.CELL_SIZE // 2, 0), [counters[1], counters[3]]),
+            Cell((self.__rect.topright[0] - settings.CELL_SIZE, 0), [counters[2], counters[3], counters[7]]),
+            Cell((0, self.__rect.centery - settings.CELL_SIZE // 2), [counters[0], counters[4]]),
+            Cell((self.__rect.centerx - settings.CELL_SIZE // 2, self.__rect.centery - settings.CELL_SIZE // 2),
+                 [counters[1], counters[4], counters[6], counters[7]]),
+            Cell((self.__rect.midright[0] - settings.CELL_SIZE, self.__rect.centery - settings.CELL_SIZE // 2),
+                 [counters[2], counters[4]]),
+            Cell((0, self.__rect.bottomleft[1] - settings.CELL_SIZE), [counters[0], counters[5], counters[7]]),
+            Cell((self.__rect.centerx - settings.CELL_SIZE // 2, self.__rect.midbottom[1] - settings.CELL_SIZE),
+                 [counters[1], counters[5]]),
+            Cell((self.__rect.bottomright[0] - settings.CELL_SIZE, self.__rect.bottomright[1] - settings.CELL_SIZE),
+                 [counters[2], counters[5], counters[6]])
         ]
-        self.__free_cells = self.__cells.copy()
 
-        self.__grid.set_colorkey(colors.DEFAULT)
+        self.set_colorkey(0)
 
     @property
-    def get_n_free_cells(self) -> int:
-        return len(self.__free_cells)
+    def get_n_cells(self) -> int:
+        return len(self.__cells)
 
-    def paint(self, painting_surface: Surface):
-        """Рисует клетки на поверхности сетки, рисует поверхность сетки на переданной поверхности.
-        painting_surface: поверхность, на которой надо нарисовать поверхность сетки
-        """
-        for cell in self.__cells:
-            cell.paint(self.__grid)
-        painting_surface.blit(self.__grid, self.__rect)
+    def has_clicked_cell(self, click_pos: tuple[int, int]) -> bool:  # ////nn
+        """"""
+        self.__clicked_cells = [c for c in self.__cells if c.is_clicked(click_pos)]
+        return len(self.__clicked_cells) > 0
 
-    def click_move_handler(self, click_pos: tuple, figure_path: str) -> bool:
+    def move_by_click(self, figure: Surface) -> None:
         """Берёт клетку, по которой кликнул пользователь, передаёт ей путь к изображению фигуры, которой походили,
             удаляет эту клетку из списка свободных и возвращает True, если всё удалось, иначе False.
         click_pos: координаты клика
         figure_path: путь к изображению с фигурой, которой походили
         """
-        clicked_cells = [fc for fc in self.__free_cells if fc.rect.collidepoint(click_pos)]
-        if len(clicked_cells) > 0:
-            clicked_cells[0].move_handler(figure_path)
-            self.__free_cells.remove(clicked_cells[0])
-            return True
-        return False
+        self.__update_counters(self.__clicked_cells[0].get_counters)
+        self.__clicked_cells[0].update(figure)
+        self.__clicked_cells[0].paint(self)
+        self.__cells.remove(self.__clicked_cells[0])
 
-    def index_move_handler(self, index_to_move: int, figure_path: str):
+    def move_by_index(self, index_to_move: int, figure: Surface) -> None:
         """Передаёт клетке по индексу путь к изображению фигуры, которой походили и удаляет эту клетку из списка
             свободных.
         index_to_move: индекс клетки, в которую сделан ход
         figure_path: путь к изображению с фигурой, которой походили
         """
-        self.__free_cells[index_to_move].move_handler(figure_path)
-        del self.__free_cells[index_to_move]
+        self.__update_counters(self.__cells[index_to_move].get_counters)
+        self.__cells[index_to_move].update(figure)
+        self.__cells[index_to_move].paint(self)
+        del self.__cells[index_to_move]
+
+    def __update_counters(self, cell_counters: list[Counter]) -> None:
+        """"""
+        self.__cur_figure_counters.extend([c for c in cell_counters if not c.has_figure()])
+        for c in cell_counters:
+            if c in self.__cur_figure_counters:
+                c.add()
+
+    def has_win(self) -> bool:  # ////nn
+        """"""
+        finish = False
+        for counter in self.__cur_figure_counters:
+            if counter.is_filled():
+                finish = True
+                break
+        self.__cur_figure_counters, self.__next_figure_counters =\
+            self.__next_figure_counters, self.__cur_figure_counters
+        return finish
+
+    def has_draw(self) -> bool:  # ////nn
+        """"""
+        return len(self.__cells) == 0

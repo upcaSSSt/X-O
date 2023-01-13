@@ -1,0 +1,7 @@
+AI_GAME = "Играть с компьютером"
+HUMAN_GAME = "Играть с другом"
+AI_NAME = "Sanakan"
+FIRST_PLAYER_NAME = "Игрок 1"
+SECOND_PLAYER_NAME = "Игрок 2"
+DRAW = "Ничья!"
+PLAY_AGAIN = "Играть снова"

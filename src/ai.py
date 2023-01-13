@@ -1,11 +1,17 @@
 from random import randrange
 
+from src.const import text
+from src.abstract.player import Player
+from src.field import Field
 
-class AI:
+
+class AI(Player):
     """Класс для создания игрока-компьютера и реализации его поведения."""
 
-    def move(self, n_free_cells: int) -> int:
-        """Возвращает случайный индекс клетки, в которую будет сделан ход.
-        n_free_cells: кол-во свободных клеток, в которые можно ходить
-        """
-        return randrange(n_free_cells)
+    def __init__(self, figure_path: str):
+        """"""
+        super(AI, self).__init__(text.AI_NAME, figure_path)
+
+    def move(self, field: Field) -> None:
+        """"""
+        field.move_by_index(randrange(field.get_n_cells), self._figure)

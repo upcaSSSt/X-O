@@ -1,34 +1,27 @@
-from pygame import image
-from pygame import sprite
 from pygame import Surface
 
 from src.const import settings
+from src.abstract.button import Button
+from src.counter import Counter
 
 
-class Cell(sprite.Sprite):
+class Cell(Button):
     """Класс для создания спрайта клетки и реализации его поведения."""
 
-    def __init__(self, pos: tuple):
+    def __init__(self, pos: tuple[int, int], counters: list[Counter]):
         """Создаёт поверхность спрайта, на которой будет нарисована фигура, сохраняет прямоугольник поверхности, ставит
             координаты клетки на поверхности сетки, делает поверхность прозрачной.
         pos: координаты, по которым будет располагаться клетка на поверхности сетки
         """
-        super().__init__()
+        super(Cell, self).__init__(Surface((settings.CELL_SIZE, settings.CELL_SIZE)))
+        self.rect = self.image.get_rect(topleft=pos)
+        self.__counters = counters
 
-        self.image = Surface((settings.CELL_SIZE, settings.CELL_SIZE))
-        self.rect = self.image.get_rect()
+    @property
+    def get_counters(self) -> list[Counter]:
+        return self.__counters
 
-        self.rect.topleft = pos
-        self.image.set_alpha(0)
-
-    def paint(self, painting_grid: Surface):
-        """Рисует клетку на переданной поверхности сетки.
-        painting_grid: поверхность сетки, на которой надо нарисовать поверхность клетки
-        """
-        painting_grid.blit(self.image, self.rect)
-
-    def move_handler(self, figure_path: str):
+    def update(self, *args: Surface) -> None:  # Надеюсь я правильно понял задумку update.
         """Рисует на поверхности клетки изображение фигуры, расположенное по переданному пути.
-        figure_path: путь к изображению фигуры, которой походили
-        """
-        self.image = image.load(figure_path).convert_alpha()
+        figure_path: путь к изображению фигуры, которой походили"""
+        self.image = args[0]

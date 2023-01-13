@@ -8,9 +8,13 @@ class Counter:
         """Создаёт счётчик одинаковых фигур в рядах победы."""
         self.__count = 0
 
-    def add(self):
+    def add(self) -> None:
         """Обновляет счётчик."""
         self.__count += 1
+
+    def has_figure(self) -> bool:
+        """"""
+        return self.__count > 0
 
     def is_filled(self) -> bool:
         """Проверяет заполненность ряда победы."""

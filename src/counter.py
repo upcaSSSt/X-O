@@ -13,7 +13,7 @@ class Counter:
         self.__count += 1
 
     def has_figure(self) -> bool:
-        """"""
+        """Проверяет наличие фигур в ряду победы."""
         return self.__count > 0
 
     def is_filled(self) -> bool:

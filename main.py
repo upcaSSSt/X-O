@@ -1,6 +1,6 @@
-from src.static import pygame_initializer
+from src.static.pygame_initializer import init_game
 from src.xo import XO
 
-pygame_initializer.init_pygame()
+init_game()
 xo = XO()
 xo.run()

@@ -1,3 +1,5 @@
+from typing import Tuple
+from typing import List
 from statistics import mean
 
 from src.const import settings
@@ -10,7 +12,7 @@ from src.window_switcher import WindowSwitcher
 class IntermediateWindow(Window):
     """"""
 
-    def __init__(self, labels: list[Label], switchers: list[WindowSwitcher],
+    def __init__(self, labels: List[Label], switchers: List[WindowSwitcher],
                  padding_top: int = settings.SCREEN_SIZE // 8):
         """"""
         super(IntermediateWindow, self).__init__()
@@ -37,7 +39,7 @@ class IntermediateWindow(Window):
             items[i].rect.midtop = (self.__rect.centerx, items[i - 1].rect.bottom + row_gap)
             items[i].paint(self)
 
-    def handle_click(self, click_pos: tuple[int, int]) -> None:
+    def handle_click(self, click_pos: Tuple[int, int]) -> None:
         """"""
         for button in self.__switchers:
             if button.is_clicked(click_pos):

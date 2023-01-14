@@ -1,3 +1,4 @@
+from typing import Tuple
 from abc import ABC, abstractmethod
 
 from pygame import Surface
@@ -14,7 +15,7 @@ class Window(ABC, Surface):
         self._next_window = self
 
     @abstractmethod
-    def handle_click(self, click_pos: tuple[int, int]) -> None:
+    def handle_click(self, click_pos: Tuple[int, int]) -> None:
         raise NotImplementedError
 
     def switch_window(self):  # ////

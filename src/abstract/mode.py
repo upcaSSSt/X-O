@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from pygame.image import load
 
 from src.const import path
@@ -29,7 +31,7 @@ class Mode(Window):
         self.blit(load(BackgroundRandomizer().random_path()).convert_alpha(), (0, 0))
         self.blit(self._main_field, (0, 0))
 
-    def handle_click(self, click_pos: tuple[int, int]) -> None:
+    def handle_click(self, click_pos: Tuple[int, int]) -> None:
         raise NotImplementedError
 
     def _move_player(self, cur_player: Player) -> None:

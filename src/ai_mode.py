@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from src.const import path
 from src.abstract.mode import Mode
 from src.ai import AI
@@ -10,7 +12,7 @@ class AIMode(Mode):
         """"""
         super(AIMode, self).__init__(AI(path.CIRCLE))
 
-    def handle_click(self, click_pos: tuple[int, int]) -> None:
+    def handle_click(self, click_pos: Tuple[int, int]) -> None:
         """"""
         if self._main_field.has_clicked_cell(click_pos):
             self._move_player(self._cross_player)

@@ -1,20 +1,12 @@
-from abc import ABC
-
-from pygame import Surface
-from pygame.sprite import Sprite
+from src.abstract.widget import Widget
 
 
-class WindowItem(ABC, Sprite):
-    """"""
-    
-    def __init__(self, image: Surface):
-        """"""
-        super(WindowItem, self).__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
+class WindowItem(Widget):
+    """Всё что может находиться на окне."""
 
-    def paint(self, painting_surf: Surface) -> None:
-        """Рисует клетку на переданной поверхности сетки.
-        painting_grid: поверхность сетки, на которой надо нарисовать поверхность клетки
-        """
-        painting_surf.blit(self.image, self.rect)
+    @property
+    def get_height(self) -> int:
+        return self._rect.height
+
+    def set_midtop(self, pos: tuple[int, int]) -> None:
+        self._rect.midtop = pos

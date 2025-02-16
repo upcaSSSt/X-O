@@ -12,10 +12,10 @@ class Counter:
         """Обновляет счётчик."""
         self.__count += 1
 
-    def has_figure(self) -> bool:
-        """Проверяет наличие фигур в ряду победы."""
-        return self.__count > 0
+    def has_not_figure(self) -> bool:
+        """Проверяет наличие фигур в ряду победы.???"""
+        return self.__count == 0
 
     def is_filled(self) -> bool:
         """Проверяет заполненность ряда победы."""
-        return self.__count >= settings.N_TO_FILL_ROW
+        return self.__count >= settings.N_CELLS_IN_ROW
